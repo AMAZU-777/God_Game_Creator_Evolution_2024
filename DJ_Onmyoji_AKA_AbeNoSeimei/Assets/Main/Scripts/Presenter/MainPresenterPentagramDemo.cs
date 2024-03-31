@@ -47,6 +47,23 @@ namespace Main.Presenter
 
         private void Start()
         {
+            this.UpdateAsObservable()
+                .Select(_ => pentagramTurnTableModel.WrapTurretModel.OnmyoBulletModelStates)
+                .Where(q => q != null &&
+                    0 < q.Length)
+                .Take(1)
+                .Subscribe(x =>
+                {
+                    foreach (var onmyoBulletModelStates in x.Select((p, i) => new { Content = p, Index = i }))
+                        onmyoBulletModelStates.Content.IsExplosion.ObserveEveryValueChanged(x => x.Value)
+                            .Where(x => x)
+                            .Subscribe(x =>
+                            {
+                                Observable.FromCoroutine<bool>(observer => pentagramTurnTableView.PlayDirectionExplosionOfWrapTurretView(observer, onmyoBulletModelStates.Index))
+                                    .Subscribe(_ => {})
+                                    .AddTo(gameObject);
+                            });
+                });
             BgmConfDetails bgmConfDetails = new BgmConfDetails();
             this.UpdateAsObservable()
                 // .Where(_ => pentagramSystemModel.InputSlipLoopState.IsLooping != null &&

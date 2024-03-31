@@ -16,7 +16,7 @@ namespace Main.Utility
     /// </summary>
     /// <see href="https://www.notion.so/b17775a9a3b34f27a911c50454d5165e?pvs=4"/>
     /// <see href="https://www.notion.so/a72678495bbf42b2af5f88bcfcc29198?pvs=4"/>
-    public class ShikigamiParameterUtility : IShikigamiParameterUtility
+    public class ShikigamiParameterUtility : IShikigamiParameterUtility, IShikigamiParameterUtilityOfExplosion, IShikigamiParameterUtilityOfBoolean, IShikigamiParameterUtilityOfHighEnd, IShikigamiParameterUtilityOfInteger
     {
         /// <summary>共通のユーティリティ</summary>
         private MainCommonUtility _common = new MainCommonUtility();
@@ -247,6 +247,85 @@ namespace Main.Utility
                 });
             return skills.ToArray();
         }
+
+        public float? GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            try
+            {
+                return GetSubSkills(shikigamiInfo, subSkillType, q => q.value);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning(e);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// サブスキルのいずれかの値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキルのいずれかの値</returns>
+        /// <exception cref="System.Exception">サブスキルプロパティが1つもない場合、または指定したスキルタイプのサブスキルプロパティが1つもない場合にスローされます</exception>
+        private T GetSubSkills<T>(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType, System.Func<SubSkillList, T> selector)
+        {
+            var skillLists = _common.AdminDataSingleton.AdminBean.levelDesign.subSkillLists;
+            if (skillLists.Length < 1)
+                throw new System.Exception($"{skillLists.Length}つのサブスキルプロパティから取得できない");
+
+            var array = skillLists.Where(q => ((ShikigamiType)q.shikigamiType).Equals(shikigamiInfo.prop.type) &&
+                ((SubSkillType)q.subSkillType).Equals(subSkillType) &&
+                ((SkillRank)q.skillRank).Equals(GetSubSkillRank(shikigamiInfo, subSkillType)))
+                .Select(selector)
+                .ToArray();
+            if (array.Length < 1)
+                throw new System.Exception($"{skillLists.Length}つのサブスキルプロパティから取得できない[{shikigamiInfo.prop.type}][{subSkillType}]");
+
+            return array[0];
+        }
+
+        /// <summary>
+        /// スキルランクの取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>スキルランク</returns>
+        /// <exception cref="System.Exception">サブスキルプロパティが1つもない場合、または指定したスキルタイプのサブスキルプロパティが1つもない場合にスローされます</exception>
+        private SkillRank GetSubSkillRank(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            var skills = shikigamiInfo.prop.subSkills;
+            if (skills.Length < 1)
+                throw new System.Exception($"{skills.Length}つのサブスキルプロパティから取得できない");
+
+            var array = skills.Where(q => q.type.Equals(subSkillType))
+                .Select(q => q.rank)
+                .ToArray();
+            if (array.Length < 1)
+                throw new System.Exception($"{skills.Length}つのサブスキルプロパティから取得できない[{subSkillType}]");
+
+            return array[0];
+        }
+
+        OnmyoBulletConfigOfExplosion IShikigamiParameterUtilityOfExplosion.GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool IShikigamiParameterUtilityOfBoolean.GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        OnmyoBulletConfigOfHighEnd IShikigamiParameterUtilityOfHighEnd.GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int IShikigamiParameterUtilityOfInteger.GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -264,6 +343,13 @@ namespace Main.Utility
         /// <returns>メインスキル値</returns>
         /// <exception cref="System.Exception">メインスキルプロパティが1つもない場合、または指定したスキルタイプのメインスキルプロパティが1つもない場合にスローされます</exception>
         public float GetMainSkillValue(ShikigamiInfo shikigamiInfo, MainSkillType mainSkillType);
+        /// <summary>
+        /// サブスキル値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキル値</returns>
+        public float? GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType);
 
         /// <summary>
         /// メインスキル値*倍率値の取得
@@ -287,5 +373,69 @@ namespace Main.Utility
         /// </summary>
         /// <returns>ペンダグラムテーブル情報</returns>
         public PentagramTurnTableInfo GetPentagramTurnTableInfo();
+    }
+
+    /// <summary>
+    /// 式神タイプ別パラメータ管理
+    /// 爆発
+    /// インタフェース
+    /// </summary>
+    public interface IShikigamiParameterUtilityOfExplosion
+    {
+        /// <summary>
+        /// サブスキル値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキル値</returns>
+        public OnmyoBulletConfigOfExplosion GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType);
+    }
+    
+    /// <summary>
+    /// 式神タイプ別パラメータ管理
+    /// 真偽
+    /// インタフェース
+    /// </summary>
+    public interface IShikigamiParameterUtilityOfBoolean
+    {
+        /// <summary>
+        /// サブスキル値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキル値</returns>
+        public bool GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType);
+    }
+
+    /// <summary>
+    /// 式神タイプ別パラメータ管理
+    /// 数値
+    /// インタフェース
+    /// </summary>
+    public interface IShikigamiParameterUtilityOfInteger
+    {
+        /// <summary>
+        /// サブスキル値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキル値</returns>
+        public int GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType);
+    }
+
+    /// <summary>
+    /// 式神タイプ別パラメータ管理
+    /// ハイエンド
+    /// インタフェース
+    /// </summary>
+    public interface IShikigamiParameterUtilityOfHighEnd
+    {
+        /// <summary>
+        /// サブスキル値の取得
+        /// </summary>
+        /// <param name="shikigamiInfo">式神の情報</param>
+        /// <param name="subSkillType">スキルタイプ</param>
+        /// <returns>サブスキル値</returns>
+        public OnmyoBulletConfigOfHighEnd GetSubSkillValue(ShikigamiInfo shikigamiInfo, SubSkillType subSkillType);
     }
 }

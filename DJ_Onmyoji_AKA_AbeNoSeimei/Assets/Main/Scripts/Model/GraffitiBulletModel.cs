@@ -32,6 +32,10 @@ namespace Main.Model
                 Transform.position = position;
                 if (0f < updateConf.range)
                     _rangeMax = updateConf.range;
+                // 被ダメージ増加
+                // 継続ダメージ
+                // 強化解除
+                // ドレイン（回復）
 
                 return true;
             }

@@ -76,5 +76,23 @@ namespace Main.Common
         Spreading = 4,
         /// <summary>連射</summary>
         ContinuousFire = 5,
+        /// <summary>ノックバック</summary>
+        KnockBack = 8,
+        /// <summary>麻痺</summary>
+        Paralysis = 9,
+        /// <summary>低範囲&超火力</summary>
+        TitanWaltz = 10,
+        /// <summary>広範囲</summary>
+        LargeRange = 16,
+        /// <summary>伝播</summary>
+        Propagation = 11,
+        /// <summary>被ダメージ増加</summary>
+        IncreasedDamage = 12,
+        /// <summary>継続ダメージ</summary>
+        Poison = 13,
+        /// <summary>強化解除</summary>
+        CancelBuff = 14,
+        /// <summary>ドレイン（回復）</summary>
+        Drain = 15,
     }
 }

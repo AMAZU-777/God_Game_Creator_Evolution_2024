@@ -25,6 +25,10 @@ namespace Main.View
         [SerializeField] private float slipLoopAngle = 30f;
         /// <summary>スリップループ用の変更前角度</summary>
         private Vector3? _fromAngle;
+        /// <summary>ラップビュー</summary>
+        private WrapTurretView _wrapTurretView;
+        /// <summary>ラップビュー</summary>
+        public WrapTurretView WrapTurretView => _wrapTurretView != null ? _wrapTurretView : _wrapTurretView = GetComponentInChildren<WrapTurretView>();
 
         public bool MoveSpin(BgmConfDetails bgmConfDetails)
         {
@@ -179,6 +183,15 @@ namespace Main.View
                 return false;
             }
         }
+
+        public IEnumerator PlayDirectionExplosionOfWrapTurretView(System.IObserver<bool> observer, int index)
+        {
+            Observable.FromCoroutine<bool>(observer => WrapTurretView.PlayEffectExplosion(observer, index))
+                .Subscribe(_ => observer.OnNext(true))
+                .AddTo(gameObject);
+
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -227,5 +240,13 @@ namespace Main.View
         /// <param name="jockeyCommandType">ジョッキーコマンドタイプ</param>
         /// <returns>コルーチン</returns>
         public IEnumerator PlayDirectionBackSpin(System.IObserver<bool> observer, JockeyCommandType jockeyCommandType);
+        /// <summary>
+        /// 爆発演出
+        /// ラップのみ
+        /// </summary>
+        /// <param name="observer">バインド</param>
+        /// <param name="index">インデックス</param>
+        /// <returns>コルーチン</returns>
+        public IEnumerator PlayDirectionExplosionOfWrapTurretView(System.IObserver<bool> observer, int index);
     }
 }

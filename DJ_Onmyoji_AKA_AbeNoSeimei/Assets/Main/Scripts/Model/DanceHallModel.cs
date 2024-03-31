@@ -27,6 +27,10 @@ namespace Main.Model
                     if (!attackColliderOfOnmyoBullet.SetRadiosOfCircleCollier2D(updateConf.range))
                         throw new System.Exception("SetRadiosOfCircleCollier2D");
                 _target = updateConf.trackingOfAny;
+                // ノックバック
+                // 麻痺
+                // 広範囲
+                // 伝播
 
                 return true;
             }

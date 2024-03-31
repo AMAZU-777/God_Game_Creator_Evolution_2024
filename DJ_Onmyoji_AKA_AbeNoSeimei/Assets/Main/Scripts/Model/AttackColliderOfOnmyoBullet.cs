@@ -12,6 +12,8 @@ namespace Main.Model
     {
         /// <summary>円形コライダー2D</summary>
         [SerializeField] private CircleCollider2D circleCollider2D;
+        /// <summary>コライダー半径</summary>
+        private float _circleCollider2DRadius;
 
         private void Reset()
         {
@@ -20,7 +22,10 @@ namespace Main.Model
             circleCollider2D = GetComponent<CircleCollider2D>();
         }
 
-        protected override void Start() { }
+        protected override void Start()
+        {
+            _circleCollider2DRadius = circleCollider2D.radius;
+        }
 
         protected override void OnTriggerEnter2D(Collider2D other)
         {
@@ -30,6 +35,9 @@ namespace Main.Model
         protected override void OnDisable()
         {
             IsHit.Value = false;
+            // 半径が異なる場合は戻す
+            if (circleCollider2D.radius != _circleCollider2DRadius)
+                circleCollider2D.radius = _circleCollider2DRadius;
         }
 
         public bool SetRadiosOfCircleCollier2D(float radios)

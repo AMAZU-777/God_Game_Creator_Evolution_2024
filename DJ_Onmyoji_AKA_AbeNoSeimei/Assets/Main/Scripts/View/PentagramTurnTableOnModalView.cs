@@ -40,6 +40,11 @@ namespace Main.View
             throw new System.NotImplementedException();
         }
 
+        public IEnumerator PlayDirectionExplosionOfWrapTurretView(System.IObserver<bool> observer, int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool ResetFromAngle()
         {
             throw new System.NotImplementedException();

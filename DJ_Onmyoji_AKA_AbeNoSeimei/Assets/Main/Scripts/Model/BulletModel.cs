@@ -32,7 +32,9 @@ namespace Main.Model
         [SerializeField] protected AttackColliderOfOnmyoBullet attackColliderOfOnmyoBullet;
         /// <summary>砲台系ユーティリティ</summary>
         protected TurretUtility _turretUtility = new TurretUtility();
-
+        // /// <summary>連射</summary>
+        // protected OnmyoBulletConfigOfHighEnd _continuousFire;
+        
 
         protected override void Reset()
         {

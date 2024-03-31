@@ -103,6 +103,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2732217995522723499, guid: 7691e9e14c105c24280bd76b731b5100, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3108818783214323045}
+    - targetCorrespondingSourceObject: {fileID: 2732217995522723499, guid: 7691e9e14c105c24280bd76b731b5100, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 719301769716129976}
   m_SourcePrefab: {fileID: 100100000, guid: 7691e9e14c105c24280bd76b731b5100, type: 3}
 --- !u!1 &4958497037329723058 stripped
 GameObject:
@@ -124,3 +127,16 @@ MonoBehaviour:
   objectsPoolPrefab: {fileID: 7497276588651718180, guid: 4434f5da33952be4c941a59c25b13d50, type: 3}
   instanceRateTimeSec: 0.5
   instanceRateTimeSecCorrection: 2
+--- !u!114 &719301769716129976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4958497037329723058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84364a6e28584ab4c8088aedb7685cc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effecctsPoolPrefab: {fileID: 7297453423588510426, guid: 77eaa4844a3c462489170cb107a629a6, type: 3}

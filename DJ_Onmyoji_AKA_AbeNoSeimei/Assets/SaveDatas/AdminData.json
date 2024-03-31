@@ -217,6 +217,14 @@
 				"skillRank": 0,
 				"value": 10
 			}
+		],
+		"subSkillLists": [
+			{
+				"shikigamiType": 0,
+				"subSkillType": 2,
+				"skillRank": 0,
+				"value": 0.5
+			}
 		]
 	},
 	"clearCountdownTimerCircleView": {

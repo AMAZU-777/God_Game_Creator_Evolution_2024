@@ -47,8 +47,12 @@ namespace Main.Model
 
         protected override void Start()
         {
-            var model = GameObject.Find(ConstGameObjectNames.GAMEOBJECT_NAME_PENTAGRAMTURNTABLE).GetComponent<PentagramTurnTableModel>();
-            _shikigamiInfo = _shikigamiUtility.GetShikigamiInfo(model.PentagramTurnTableInfo, InstanceID);
+            var obj = GameObject.Find(ConstGameObjectNames.GAMEOBJECT_NAME_PENTAGRAMTURNTABLE);
+            if (obj != null)
+            {
+                var model = obj.GetComponent<PentagramTurnTableModel>();
+                _shikigamiInfo = _shikigamiUtility.GetShikigamiInfo(model.PentagramTurnTableInfo, InstanceID);
+            }
             _shikigamiInfo.state.tempoLevel = new FloatReactiveProperty();
             _bulletCompass.bulletCompassType = BulletCompassType.Default;
             base.Start();

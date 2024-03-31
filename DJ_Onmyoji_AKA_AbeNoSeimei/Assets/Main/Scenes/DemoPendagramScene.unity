@@ -296,8 +296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62006e5f91a058439efbfbb5240c381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSlipLoopState:
-    beatLength: 0
   isLooping: 0
   bGMInfos:
   - clipToPlayBGM: 0
@@ -321,12 +319,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130225755}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14939499, y: 0.34743354, z: -0.022934705}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.020201325, y: -0.043714315, z: 0.0013776626}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1622680332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &188063942
 PrefabInstance:
@@ -396,6 +394,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07283c2439253e540a391e42ef66c8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &237194043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 237194045}
+  - component: {fileID: 237194044}
+  m_Layer: 0
+  m_Name: PentagramTurnTableViewTest1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &237194044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237194043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881ac0b297354874abf8efd9a00b9e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pentagramTurnTableView: {fileID: 1476646630}
+--- !u!4 &237194045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237194043}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.439705, y: 4.349058, z: -0.36791724}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &251208947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -639,8 +682,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f7d0e40adb4934e80d0db8da56704e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSlipLoopState:
-    beatLength: 0
   isLooping: 0
   bGMInfos:
   - clipToPlayBGM: 0
@@ -664,12 +705,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750697348}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14939499, y: 0.34743354, z: -0.022934705}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.020201325, y: -0.043714315, z: 0.0013776626}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1622680332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &784155772
 PrefabInstance:
@@ -750,6 +791,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd141889dc2aa574397f98b1a1ddad95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &909288543
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909288545}
+  - component: {fileID: 909288544}
+  - component: {fileID: 909288546}
+  m_Layer: 0
+  m_Name: WrapTurretModelTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &909288544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909288543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0abde93d4cf05745873a29d0d42610a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pentagramTurnTableModel: {fileID: 1476646629}
+  objectsPoolPrefab: {fileID: 7497276588651718180, guid: 4434f5da33952be4c941a59c25b13d50, type: 3}
+--- !u!4 &909288545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909288543}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &909288546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909288543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20e1fdce94e97f14bb9de70fb72b6184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onmyoBulletConfig:
+    moveDirection: {x: 0, y: 0}
+    moveSpeed: 0
+    actionRate: 0
+    bulletLifeTime: 0
+    attackPoint: 0
+    range: 0
+    trackingOfAny: {fileID: 0}
+    debuffEffectLifeTime: 0
+    onmyoBulletConfigOfExplosion:
+      explosionDuration: 0
+      explosionRange: 0
+    continuousFire:
+      actionRate: 0
+      instanceMax: 0
+      spreadingAngle: 0
+    penetrating: 0
+    spreading:
+      actionRate: 0
+      instanceMax: 0
+      spreadingAngle: 0
+    knockBack: 0
+    paralysis: 0
+    largeRange: 0
+    propagation: 0
+    increasedDamage: 0
+    poison: 0
+    cancelBuff: 0
+    drain: 0
 --- !u!1 &1026360578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,6 +1273,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1654429920}
+  - {fileID: 750697350}
+  - {fileID: 130225757}
+  - {fileID: 2086026780}
   - {fileID: 1490641911}
   - {fileID: 553785965}
   - {fileID: 329806109}
@@ -1179,8 +1312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42134063f68ce14c8c0e874c46a478b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSlipLoopState:
-    beatLength: 0
   isLooping: 0
   bGMInfos:
   - clipToPlayBGM: 0
@@ -1204,12 +1335,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1654429918}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14939499, y: 0.34743354, z: -0.022934705}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.020201325, y: -0.043714315, z: 0.0013776626}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1622680332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1778039223
 GameObject:
@@ -1361,8 +1492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c795d5811abd141b14fe8e7b28c880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSlipLoopState:
-    beatLength: 0
   isLooping: 0
   bGMInfos:
   - clipToPlayBGM: 0
@@ -1386,12 +1515,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086026778}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14939499, y: 0.34743354, z: -0.022934705}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.020201325, y: -0.043714315, z: 0.0013776626}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1622680332}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -1405,8 +1534,6 @@ SceneRoots:
   - {fileID: 188063942}
   - {fileID: 784155772}
   - {fileID: 1956654957}
-  - {fileID: 2086026780}
-  - {fileID: 130225757}
-  - {fileID: 750697350}
-  - {fileID: 1654429920}
   - {fileID: 1622680332}
+  - {fileID: 237194045}
+  - {fileID: 909288545}

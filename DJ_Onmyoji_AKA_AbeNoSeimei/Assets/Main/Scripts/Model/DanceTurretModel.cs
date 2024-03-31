@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Main.Common;
+using Main.Utility;
 
 namespace Main.Model
 {
@@ -13,7 +14,8 @@ namespace Main.Model
     {
         protected override OnmyoBulletConfig InitializeOnmyoBulletConfig()
         {
-            return new OnmyoBulletConfig()
+            // メイン
+            var onmyoBulletConfig = new OnmyoBulletConfig()
             {
                 actionRate = _shikigamiUtility.GetMainSkillValue(_shikigamiInfo, MainSkillType.ActionRate),
                 attackPoint = (int)_shikigamiUtility.GetMainSkillValue(_shikigamiInfo, MainSkillType.AttackPoint),
@@ -23,6 +25,17 @@ namespace Main.Model
                 moveSpeed = 0f,
                 trackingOfAny = RectTransform,
             };
+            // ノックバック
+            onmyoBulletConfig.knockBack = _shikigamiUtility.GetSubSkillValue(_shikigamiInfo, SubSkillType.KnockBack);
+            // 麻痺
+            onmyoBulletConfig.paralysis = _shikigamiUtility.GetSubSkillValue(_shikigamiInfo, SubSkillType.Paralysis);
+            // 広範囲
+            var largeRange = _shikigamiUtility.GetSubSkillValue(_shikigamiInfo, SubSkillType.LargeRange);
+            onmyoBulletConfig.largeRange = largeRange != null ? largeRange.Value : 1f;
+            // 伝播
+            onmyoBulletConfig.propagation = ((IShikigamiParameterUtilityOfInteger)_shikigamiUtility).GetSubSkillValue(_shikigamiInfo, SubSkillType.Propagation);
+
+            return onmyoBulletConfig;
         }
 
         protected override OnmyoBulletConfig ReLoadOnmyoBulletConfig(OnmyoBulletConfig config)

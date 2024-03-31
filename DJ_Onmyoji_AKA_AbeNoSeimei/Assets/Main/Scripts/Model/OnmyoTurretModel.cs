@@ -23,8 +23,6 @@ namespace Main.Model
 
         protected override OnmyoBulletConfig ReLoadOnmyoBulletConfig(OnmyoBulletConfig config)
         {
-            config.moveDirection = _mainCommonUtility.AdminDataSingleton.AdminBean.onmyoBulletModel.moveDirection;
-
             return _turretUtility.UpdateMoveDirection(_bulletCompass, config);
         }
 
@@ -79,7 +77,7 @@ namespace Main.Model
         public bool InitializeBulletCompass(Vector2 fromPosition, Vector2 danceVector)
         {
             return _turretUtility.InitializeBulletCompass(ref _bulletCompass,
-                (fromPosition - new Vector2(RectTransform.position.x, RectTransform.position.y)).normalized,
+                (new Vector2(RectTransform.position.x, RectTransform.position.y) - fromPosition).normalized,
                 danceVector);
         }
 

@@ -22,6 +22,8 @@ namespace Main.Model
         protected SpawnUtility _spawnUtility = new SpawnUtility();
         /// <summary>オブジェクトプール</summary>
         protected ObjectsPoolModel _poolModel;
+        /// <summary>魔力弾ステート</summary>
+        public OnmyoBulletModelState[] OnmyoBulletModelStates => _poolModel.OnmyoBulletModelStates;
 
         protected virtual void Start()
         {

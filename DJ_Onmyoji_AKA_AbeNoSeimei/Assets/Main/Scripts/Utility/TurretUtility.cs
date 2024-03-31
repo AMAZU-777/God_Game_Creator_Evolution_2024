@@ -113,6 +113,7 @@ namespace Main.Utility
         {
             try
             {
+                bulletCompass.moveDirectionDefault = outSideVector;
                 bulletCompass.moveDirectionCenterBetweenOutSide = outSideVector;
                 bulletCompass.moveDirectionDanceForward = danceVector;
 
@@ -145,9 +146,12 @@ namespace Main.Utility
             switch (bulletCompass.bulletCompassType)
             {
                 case BulletCompassType.Default:
+                    config.moveDirection = bulletCompass.moveDirectionDefault;
+
                     break;
                 case BulletCompassType.CenterBetweenOutSide:
-                    // TODO:スクラッチの際の角度補正を実装
+                    config.moveDirection = bulletCompass.moveDirectionCenterBetweenOutSide;
+
                     break;
                 case BulletCompassType.DanceForward:
                     config.moveDirection = bulletCompass.moveDirectionDanceForward;

@@ -83,6 +83,10 @@ namespace Universal.Bean
                     value = 10f,
                 },
             },
+            subSkillLists = new SubSkillList[]
+            {
+
+            },
         };
         public ClearCountdownTimerCircleView clearCountdownTimerCircleView = new ClearCountdownTimerCircleView()
         {
@@ -257,6 +261,7 @@ namespace Universal.Bean
     public class LevelDesign
     {
         public MainSkillList[] mainSkillLists;
+        public SubSkillList[] subSkillLists;
     }
 
     [System.Serializable]
@@ -267,6 +272,15 @@ namespace Universal.Bean
         public int skillRank;
         public float value;
         public float valueBuffMax;
+    }
+
+    [System.Serializable]
+    public class SubSkillList
+    {
+        public int shikigamiType;
+        public int subSkillType;
+        public int skillRank;
+        public float value;
     }
 
     [System.Serializable]

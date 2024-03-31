@@ -21,6 +21,10 @@ namespace Main.Model
         [SerializeField] private int countLimit;
         /// <summary>プール完了</summary>
         public IReactiveProperty<bool> IsCompleted { get; private set; } = new BoolReactiveProperty();
+        /// <summary>魔力弾ステート</summary>
+        private OnmyoBulletModelState[] _onmyoBulletModelStates;
+        /// <summary>魔力弾ステート</summary>
+        public OnmyoBulletModelState[] OnmyoBulletModelStates => _onmyoBulletModelStates;
         /// <summary>魔力弾のプレハブ</summary>
         [Tooltip("魔力弾のプレハブ")]
         [SerializeField] private Transform onmyoBulletPrefab;
