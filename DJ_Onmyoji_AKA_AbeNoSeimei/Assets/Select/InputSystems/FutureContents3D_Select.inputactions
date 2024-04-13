@@ -1,5 +1,5 @@
 {
-    "name": "ConnectCity_Select",
+    "name": "FutureContents3D_Select",
     "maps": [
         {
             "name": "UI",
@@ -7,30 +7,30 @@
             "actions": [
                 {
                     "name": "Navigate",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "5c1ebbfa-6379-4981-adf5-600fe2661ac6",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Submit",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "05489f99-795a-4c1f-8cb9-439b16e4ff73",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Cancel",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "2a6440eb-f943-4335-a87e-3f7b49598d5a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -201,6 +201,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6a1da330-b3e8-4b9b-9f92-7887915b395f",
+                    "path": "<MidiDevice>/control026",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Midi control scheme",
+                    "action": "Navigate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3573ff21-948b-4eb1-8d79-6c45b3fbf503",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
@@ -223,6 +234,17 @@
                 },
                 {
                     "name": "",
+                    "id": "e7c25f17-9eb7-4eb7-bdff-a4479b3f39db",
+                    "path": "<MidiDevice>/control029",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Midi control scheme",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "45d2af1d-4e75-4f7e-b486-ad75e344f9d7",
                     "path": "<Keyboard>/backspace",
                     "interactions": "",
@@ -239,6 +261,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98a36c0d-03e1-4c42-9381-c053a7fd69bc",
+                    "path": "<MidiDevice>/control030",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Midi control scheme",
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -302,6 +335,17 @@
             "devices": [
                 {
                     "devicePath": "<XRController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Midi control scheme",
+            "bindingGroup": "Midi control scheme",
+            "devices": [
+                {
+                    "devicePath": "<MidiDevice>",
                     "isOptional": false,
                     "isOR": false
                 }

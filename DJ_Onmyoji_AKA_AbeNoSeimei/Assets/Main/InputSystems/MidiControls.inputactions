@@ -1,0 +1,46 @@
+{
+    "name": "MidiControls",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "2eb83f60-955a-486a-acaa-b3451b2881e9",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "040b3a35-4d42-4132-b848-4f4088ff4e60",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "94738bb7-f5af-40b0-bf95-8da2aa9d2d9e",
+                    "path": "<MidiDevice>/control026",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Midi control scheme",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Midi control scheme",
+            "bindingGroup": "Midi control scheme",
+            "devices": [
+                {
+                    "devicePath": "<MidiDevice>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

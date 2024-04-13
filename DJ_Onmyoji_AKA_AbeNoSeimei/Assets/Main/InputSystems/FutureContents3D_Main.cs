@@ -713,6 +713,17 @@ public partial class @FutureContents3D_Main: IInputActionCollection2, IDisposabl
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Midi control scheme"",
+            ""bindingGroup"": ""Midi control scheme"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<MidiDevice>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -1058,6 +1069,15 @@ public partial class @FutureContents3D_Main: IInputActionCollection2, IDisposabl
         {
             if (m_XRSchemeIndex == -1) m_XRSchemeIndex = asset.FindControlSchemeIndex("XR");
             return asset.controlSchemes[m_XRSchemeIndex];
+        }
+    }
+    private int m_MidicontrolschemeSchemeIndex = -1;
+    public InputControlScheme MidicontrolschemeScheme
+    {
+        get
+        {
+            if (m_MidicontrolschemeSchemeIndex == -1) m_MidicontrolschemeSchemeIndex = asset.FindControlSchemeIndex("Midi control scheme");
+            return asset.controlSchemes[m_MidicontrolschemeSchemeIndex];
         }
     }
     public interface IPlayerActions

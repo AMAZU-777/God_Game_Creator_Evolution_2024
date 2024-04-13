@@ -691,6 +691,17 @@
                     "isOR": false
                 }
             ]
+        },
+        {
+            "name": "Midi control scheme",
+            "bindingGroup": "Midi control scheme",
+            "devices": [
+                {
+                    "devicePath": "<MidiDevice>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
         }
     ]
 }
