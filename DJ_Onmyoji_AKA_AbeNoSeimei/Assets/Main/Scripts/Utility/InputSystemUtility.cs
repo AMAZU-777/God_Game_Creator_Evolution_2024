@@ -26,24 +26,48 @@ namespace Main.Utility
         /// <summary>式神タイプ別パラメータ管理</summary>
         private ShikigamiParameterUtility _shikigamiParameterUtility = new ShikigamiParameterUtility();
 
-        public bool SetInputValueInModel(IReactiveProperty<float> inputValue, float multiDistanceCorrected, Vector2ReactiveProperty previousInput, float autoSpinSpeed, PentagramSystemModel model)
+        public bool SetInputValueInModel(IReactiveProperty<float> inputValue, float multiDistanceCorrected, Vector2ReactiveProperty previousInput, float autoSpinSpeed, PentagramSystemModel model, FloatReactiveProperty previousInputMidiJack)
         {
             try
             {
+                var inputSystem = MainGameManager.Instance.InputSystemsOwner;
                 Observable.FromCoroutine<InputSystemsOwner>(observer => UpdateAsObservableOfInputSystemsOwner(observer, model))
                     .Where(x => x != null)
                     .Subscribe(x =>
                     {
-                        Vector2 currentInput = x.InputUI.Scratch; // 現在の入力を取得
-                        if (IsPerformed(previousInput.Value.sqrMagnitude, currentInput.sqrMagnitude)) // 前回と今回の入力が十分に大きい場合
+                        if (inputSystem.CurrentInputMode != null)
                         {
-                            float angle = Vector2.SignedAngle(previousInput.Value, currentInput) * -1f; // 前回の入力から今回の入力への角度を計算
-                            float distance = Mathf.PI * angle / 180; // 角度を円周の長さに変換
-                            inputValue.Value = Mathf.Clamp(distance * multiDistanceCorrected, -1f, 1f);
+                            switch ((InputMode)inputSystem.CurrentInputMode.Value)
+                            {
+                                case InputMode.Gamepad:
+                                    Vector2 currentInput = x.InputUI.Scratch; // 現在の入力を取得
+                                    if (IsPerformed(previousInput.Value.sqrMagnitude, currentInput.sqrMagnitude)) // 前回と今回の入力が十分に大きい場合
+                                    {
+                                        float angle = Vector2.SignedAngle(previousInput.Value, currentInput) * -1f; // 前回の入力から今回の入力への角度を計算
+                                        float distance = Mathf.PI * angle / 180; // 角度を円周の長さに変換
+                                        inputValue.Value = Mathf.Clamp(distance * multiDistanceCorrected, -1f, 1f);
+                                    }
+                                    else
+                                        inputValue.Value = autoSpinSpeed;
+                                    previousInput.Value = currentInput; // 現在の入力を保存
+
+                                    break;
+                                case InputMode.MidiJack:
+                                    float currentInputMidiJack = x.InputMidiJack.Scratch;
+                                    if (IsPerformed(previousInputMidiJack.Value, currentInputMidiJack, true))
+                                    {
+                                        inputValue.Value = previousInputMidiJack.Value - currentInputMidiJack;
+                                    }
+                                    else
+                                        inputValue.Value = autoSpinSpeed;
+                                    previousInputMidiJack.Value = currentInputMidiJack; // 現在の入力を保存
+
+                                    break;
+                                default:
+
+                                    break;
+                            }
                         }
-                        else
-                            inputValue.Value = autoSpinSpeed;
-                        previousInput.Value = currentInput; // 現在の入力を保存
                     })
                     .AddTo(model);
 
@@ -61,11 +85,14 @@ namespace Main.Utility
         /// </summary>
         /// <param name="prevMagnitude">直前の入力値</param>
         /// <param name="currentMagnitude">現在の入力値</param>
+        /// <param name="isAbsMath">絶対値とするか</param>
         /// <returns>真／偽</returns>
-        private bool IsPerformed(float prevMagnitude, float currentMagnitude)
+        private bool IsPerformed(float prevMagnitude, float currentMagnitude, bool isAbsMath=false)
         {
-            return 0f < prevMagnitude &&
-                0f < currentMagnitude;
+            return !isAbsMath ? 0f < prevMagnitude &&
+                0f < currentMagnitude :
+                0f < Mathf.Abs(prevMagnitude) &&
+                0f < Mathf.Abs(currentMagnitude);
         }
 
         public bool SetInputValueInModel(InputBackSpinState inputBackSpinState, PentagramSystemModel model)
@@ -822,8 +849,9 @@ namespace Main.Utility
         /// <param name="previousInput">過去の入力</param>
         /// <param name="autoSpinSpeed">自動回転の速度</param>
         /// <param name="model">ペンダグラムシステムモデル</param>
+        /// <param name="previousInputMidiJack">過去の入力（MIDIJack）</param>
         /// <returns>成功／失敗</returns>
-        public bool SetInputValueInModel(IReactiveProperty<float> inputValue, float multiDistanceCorrected, Vector2ReactiveProperty previousInput, float autoSpinSpeed, PentagramSystemModel model);
+        public bool SetInputValueInModel(IReactiveProperty<float> inputValue, float multiDistanceCorrected, Vector2ReactiveProperty previousInput, float autoSpinSpeed, PentagramSystemModel model, FloatReactiveProperty previousInputMidiJack);
         /// <summary>
         /// モデルコンポーネントを監視して第1引数へセットされた値を更新
         /// スティック座標をセット

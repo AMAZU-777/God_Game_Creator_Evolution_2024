@@ -17,7 +17,7 @@ namespace Main.Model
     {
         /// <summary>自動回転の速度</summary>
         [Tooltip("自動回転の速度")]
-        [SerializeField] private static float autoSpinSpeed = .01f;
+        [SerializeField] private static float autoSpinSpeed = .10f;
         /// <summary>入力角度</summary>
         public IReactiveProperty<float> InputValue { get; private set; } = new FloatReactiveProperty(autoSpinSpeed);
         /// <summary>距離の補正乗算値</summary>
@@ -48,7 +48,8 @@ namespace Main.Model
             autoSpinSpeed = adminDataSingleton.AdminBean.pentagramSystemModel.autoSpinSpeed;
             inputHistoriesLimit = adminDataSingleton.AdminBean.pentagramSystemModel.inputHistoriesLimit;
             Vector2ReactiveProperty previousInput = new Vector2ReactiveProperty(Vector2.zero); // 前回の入力を保存する変数
-            if (!_inputSystemUtility.SetInputValueInModel(InputValue, _multiDistanceCorrected, previousInput, autoSpinSpeed, this))
+            FloatReactiveProperty previousInputMidiJack = new FloatReactiveProperty(0.0f); // 前回の入力を保存する変数
+            if (!_inputSystemUtility.SetInputValueInModel(InputValue, _multiDistanceCorrected, previousInput, autoSpinSpeed, this, previousInputMidiJack))
                 Debug.LogError("SetInputValueInModel");
             inputBackSpinState.inputVelocityValue = new Vector2ReactiveProperty();
             inputBackSpinState.recordInputTimeSec = new FloatReactiveProperty();

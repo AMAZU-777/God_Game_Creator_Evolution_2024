@@ -8,6 +8,7 @@ using UniRx.Triggers;
 using DG.Tweening;
 using Universal.Template;
 using Universal.Common;
+using MidiJack;
 
 namespace Main.InputSystem
 {
@@ -48,12 +49,21 @@ namespace Main.InputSystem
         [SerializeField] private InputHistroy inputHistroy;
         /// <summary>入力情報の履歴</summary>
         public InputHistroy InputHistroy => inputHistroy;
+        /// <summary>MIDIJackの入力を取得</summary>
+        [SerializeField] private InputMidiJack inputMidiJack;
+        /// <summary>MIDIJackの入力を取得</summary>
+        public InputMidiJack InputMidiJack => inputMidiJack;
+        /// <summary>デバイスタイプ</summary>
+        [SerializeField] private InputSysDeviceType deviceType;
+        /// <summary>デバイスタイプ</summary>
+        public InputSysDeviceType DeviceType => deviceType;
 
         private void Reset()
         {
             inputPlayer = GetComponent<InputPlayer>();
             inputUI = GetComponent<InputUI>();
             inputHistroy = GetComponent<InputHistroy>();
+            inputMidiJack = GetComponent<InputMidiJack>();
         }
 
         public void OnStart()
@@ -108,21 +118,28 @@ namespace Main.InputSystem
             _inputActions.Enable();
 
             _compositeDisposable = new CompositeDisposable();
-            _currentInputMode = new IntReactiveProperty((int)InputMode.Gamepad);
-            // 入力モード 0:キーボード 1:コントローラー
-            this.UpdateAsObservable()
-                .Subscribe(_ =>
-                {
-                    if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
-                    {
-                        _currentInputMode.Value = (int)InputMode.Keyboard;
-                    }
-                    else if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-                    {
-                        _currentInputMode.Value = (int)InputMode.Gamepad;
-                    }
-                })
-                .AddTo(_compositeDisposable);
+            _currentInputMode = new IntReactiveProperty((int)InputMode.MidiJack);
+            //// 入力モード 0:キーボード 1:コントローラー
+            //this.UpdateAsObservable()
+            //    .Subscribe(_ =>
+            //    {
+            //        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+            //        {
+            //            _currentInputMode.Value = (int)InputMode.Keyboard;
+            //            Debug.Log("Keyboard");
+            //        }
+            //        else if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+            //        {
+            //            _currentInputMode.Value = (int)InputMode.Gamepad;
+            //            Debug.Log("Gamepad");
+            //        }
+            //        else if (IsMidiMaster())
+            //        {
+            //            _currentInputMode.Value = (int)InputMode.MidiJack;
+            //            Debug.Log("MidiJack");
+            //        }
+            //    })
+            //    .AddTo(_compositeDisposable);
             // ゲームパッドの情報をセット
             _gamepad = Gamepad.current;
 
@@ -134,6 +151,41 @@ namespace Main.InputSystem
             inputHistroy.OnStart();
         }
 
+        /// <summary>
+        /// MidiJackの入力があったか
+        /// </summary>
+        /// <returns>入力あり／入力なし</returns>
+        private bool IsMidiMaster()
+        {
+            try
+            {
+                for (int noteNumber = 0; noteNumber <= 127; noteNumber++)
+                {
+                    if (MidiMaster.GetKeyDown(MidiChannel.All, noteNumber) ||
+                        MidiMaster.GetKeyUp(MidiChannel.All, noteNumber))
+                    {
+                        Debug.Log($"Midi Key {noteNumber} UP / Down Detected");
+                        return true;
+                    }
+                }
+                foreach (var knobNumber in MidiMaster.GetKnobNumbers())
+                {
+                    if (0f < MidiMaster.GetKnob(knobNumber))
+                    {
+                        Debug.Log($"Midi Knob {knobNumber} Get");
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogException(e);
+                throw e;
+            }
+        }
+
         public bool Exit()
         {
             try
@@ -141,6 +193,7 @@ namespace Main.InputSystem
                 _inputActions.Dispose();
                 inputPlayer.DisableAll();
                 inputUI.DisableAll();
+                inputMidiJack.DisableAll();
                 _compositeDisposable.Clear();
 
                 return true;
@@ -226,5 +279,18 @@ namespace Main.InputSystem
         Gamepad,
         /// <summary>キーボード</summary>
         Keyboard,
+        /// <summary>TourchOSC / DDJ-200</summary>
+        MidiJack,
+    }
+
+    /// <summary>
+    /// デバイスタイプ
+    /// </summary>
+    public enum InputSysDeviceType
+    {
+        /// <summary>コントローラー</summary>
+        GamePad,
+        /// <summary>TourchOSC / DDJ-200</summary>
+        MidiJack,
     }
 }

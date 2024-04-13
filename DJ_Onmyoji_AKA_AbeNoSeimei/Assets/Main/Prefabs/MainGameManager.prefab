@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 1827416085}
   - component: {fileID: 1827416084}
   - component: {fileID: 5705664735581028094}
+  - component: {fileID: 2598458319344061343}
   m_Layer: 0
   m_Name: InputSystemsOwner
   m_TagString: Untagged
@@ -151,6 +152,7 @@ MonoBehaviour:
   delayTime: 0.3
   isVibrationEnabled: 0
   inputHistroy: {fileID: 5705664735581028094}
+  inputMidiJack: {fileID: 2598458319344061343}
 --- !u!114 &1827416085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +195,18 @@ MonoBehaviour:
   - inputTypeID: 1
     targetPattern: 01000000ffffffff01000000
   cmdAcceptanceTimeMs: 0.25
+--- !u!114 &2598458319344061343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827416082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06714fc177f079c45974c50cd5e75abd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1369696454595932813
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,20 +255,12 @@ MonoBehaviour:
   gamePauseView: {fileID: 0}
   gamePauseModel: {fileID: 0}
   clearView: {fileID: 0}
-  stageClearView: {fileID: 0}
-  clearContentsRenderingDelayTime: 3000
-  gameProceedButtonView: {fileID: 0}
-  gameProceedButtonModel: {fileID: 0}
   gameRetryButtonView: {fileID: 0}
   gameRetryButtonModel: {fileID: 0}
   gameSelectButtonView: {fileID: 0}
   gameSelectButtonModel: {fileID: 0}
   cursorIconView: {fileID: 0}
   cursorIconModel: {fileID: 0}
-  pushTimeGageViews:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   gameManualScrollView: {fileID: 0}
   gameManualViewPageViews:
   - {fileID: 0}
@@ -285,7 +291,15 @@ MonoBehaviour:
   sunMoonStateIconView: {fileID: 0}
   pentagramTurnTableModel: {fileID: 0}
   fadersGroupView: {fileID: 0}
-  candleUniversalGaugeViews: []
+  candleUniversalGaugeViews:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemyEventSystemModel: {fileID: 0}
+  spawnSoulMoneyModel: {fileID: 0}
+  rewardSelectView: {fileID: 0}
+  rewardSelectModel: {fileID: 0}
+  clearRewardTextContents: {fileID: 0}
 --- !u!1 &1369696454729978949
 GameObject:
   m_ObjectHideFlags: 0

@@ -103,7 +103,7 @@
 		}
 	},
 	"pentagramSystemModel": {
-		"autoSpinSpeed": 0.009999999776482582,
+		"autoSpinSpeed": 0,
 		"inputHistoriesLimit": 100
 	},
 	"pentagramTurnTableView": {
