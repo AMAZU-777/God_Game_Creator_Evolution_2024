@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Common;
+using Main.InputSystem;
 using Main.Model;
 using UniRx;
 using UniRx.Triggers;
@@ -172,45 +173,78 @@ namespace Main.Utility
         {
             try
             {
-                inputSlipLoopState.crossVectorHistory.ObserveAdd()
-                    .Select(x => x.Value)
-                    .Subscribe(x =>
-                    {
-                        // スリップループ初回
-                        if (jockeyCommandType.Value != (int)JockeyCommandType.SlipLoop &&
-                            0f < Mathf.Abs(x.sqrMagnitude))
-                        {
-                            jockeyCommandType.Value = (int)JockeyCommandType.SlipLoop;
-                            inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
-                        }
-                        // スリップループ切り替え
-                        else if (jockeyCommandType.Value == (int)JockeyCommandType.SlipLoop)
-                        {
-                            // 最後に入力された方向を軸にして要素を1つずつ戻して比較、異なった時点までの件数を算出
-                            var lastInput = inputSlipLoopState.crossVectorHistory.Last();
-                            int differentCount = 0;
-                            for (int i = inputSlipLoopState.crossVectorHistory.Count - 2; i >= 0; i--)
-                                if (inputSlipLoopState.crossVectorHistory[i] != lastInput)
+                switch ((InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value)
+                {
+                    case InputMode.Gamepad:
+                        inputSlipLoopState.crossVectorHistory.ObserveAdd()
+                            .Select(x => x.Value)
+                            .Subscribe(x =>
+                            {
+                                // スリップループ初回
+                                if (jockeyCommandType.Value != (int)JockeyCommandType.SlipLoop &&
+                                    0f < Mathf.Abs(x.sqrMagnitude))
                                 {
-                                    differentCount = inputSlipLoopState.crossVectorHistory.Count - 1 - i;
-                                    break;
+                                    jockeyCommandType.Value = (int)JockeyCommandType.SlipLoop;
+                                    inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
                                 }
-                            // 偶数なら再入力、奇数なら切り替えとする
-                            if (differentCount % 2 == 0)
+                                // スリップループ切り替え
+                                else if (jockeyCommandType.Value == (int)JockeyCommandType.SlipLoop)
+                                {
+                                    // 最後に入力された方向を軸にして要素を1つずつ戻して比較、異なった時点までの件数を算出
+                                    var lastInput = inputSlipLoopState.crossVectorHistory.Last();
+                                    int differentCount = 0;
+                                    for (int i = inputSlipLoopState.crossVectorHistory.Count - 2; i >= 0; i--)
+                                        if (inputSlipLoopState.crossVectorHistory[i] != lastInput)
+                                        {
+                                            differentCount = inputSlipLoopState.crossVectorHistory.Count - 1 - i;
+                                            break;
+                                        }
+                                    // 偶数なら再入力、奇数なら切り替えとする
+                                    if (differentCount % 2 == 0)
+                                    {
+                                        inputSlipLoopState.beatLength.Value = (int)BeatLength.None;
+                                        jockeyCommandType.Value = (int)JockeyCommandType.None;
+                                        inputSlipLoopState.crossVectorHistory.Clear();
+                                    }
+                                    else
+                                    {
+                                        inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
+                                        // 最後の要素以外は削除
+                                        for (int i = 0; i < inputSlipLoopState.crossVectorHistory.Count - 1; i++)
+                                            inputSlipLoopState.crossVectorHistory.RemoveAt(0);
+                                    }
+                                }
+                            });
+
+                        break;
+                    case InputMode.MidiJack:
+                        inputSlipLoopState.crossVector.ObserveEveryValueChanged(x => x.Value)
+                            .Subscribe(x =>
                             {
-                                inputSlipLoopState.beatLength.Value = (int)BeatLength.None;
-                                jockeyCommandType.Value = (int)JockeyCommandType.None;
-                                inputSlipLoopState.crossVectorHistory.Clear();
-                            }
-                            else
-                            {
-                                inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
-                                // 最後の要素以外は削除
-                                for (int i = 0; i < inputSlipLoopState.crossVectorHistory.Count - 1; i++)
-                                    inputSlipLoopState.crossVectorHistory.RemoveAt(0);
-                            }
-                        }
-                    });
+                                // スリップループ初回
+                                if (jockeyCommandType.Value != (int)JockeyCommandType.SlipLoop &&
+                                    0f < Mathf.Abs(x.sqrMagnitude))
+                                {
+                                    jockeyCommandType.Value = (int)JockeyCommandType.SlipLoop;
+                                    inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
+                                }
+                                // スリップループ切り替え
+                                else if (jockeyCommandType.Value == (int)JockeyCommandType.SlipLoop)
+                                {
+                                    if (0f < Mathf.Abs(x.sqrMagnitude))
+                                        inputSlipLoopState.beatLength.Value = (int)GetBeatLength(x);
+                                    else
+                                    {
+                                        inputSlipLoopState.beatLength.Value = (int)BeatLength.None;
+                                        jockeyCommandType.Value = (int)JockeyCommandType.None;
+                                    }
+                                }
+                            });
+
+                        break;
+                    default:
+                        throw new System.ArgumentOutOfRangeException($"未対応の入力モード:{(InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value}");
+                }
 
                 return true;
             }

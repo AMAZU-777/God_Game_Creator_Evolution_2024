@@ -13,8 +13,10 @@ namespace Main.Common
     {
         /// <summary>拍の長さ</summary>
         public IReactiveProperty<int> beatLength;
-        /// <summary>十字キー入力履歴</summary>
+        /// <summary>十字キー入力履歴（コントローラーのみ）</summary>
         public IReactiveCollection<Vector2> crossVectorHistory;
+        /// <summary>十字キー入力情報（MIDIJackのみ）</summary>
+        public IReactiveProperty<Vector2> crossVector;
         /// <summary>ループ中</summary>
         public IReactiveProperty<bool> IsLooping { get; set; }
         /// <summary>アクショントリガー</summary>

@@ -18,6 +18,7 @@ namespace Main.InputSystem
         {
             MidiMaster.knobDelegate += OnScratch;
             MidiMaster.knobDelegate += OnSubmited;
+            MidiMaster.knobDelegate += OnPad_2;
             FloatReactiveProperty elapsedTime = new FloatReactiveProperty();
             this.UpdateAsObservable()
                 .Subscribe(_ =>
@@ -35,6 +36,7 @@ namespace Main.InputSystem
         {
             MidiMaster.knobDelegate -= OnScratch;
             MidiMaster.knobDelegate -= OnSubmited;
+            MidiMaster.knobDelegate -= OnPad_2;
             _scratch = 0f;
         }
 
@@ -48,7 +50,6 @@ namespace Main.InputSystem
         /// <param name="context">コールバック</param>
         public void OnSubmited(MidiChannel channel, int knob, float value)
         {
-            Debug.Log($"channel:[{channel}]_knob:[{knob}]_value:[{value}]");
             if (IsMidiChannelCh1(channel))
             {
                 switch ((MidiChannelKnob)knob)
@@ -63,18 +64,29 @@ namespace Main.InputSystem
             }
         }
 
-        ///// <summary>キャンセル入力</summary>
-        //private bool _canceled;
-        ///// <summary>キャンセル入力</summary>
-        //public bool Canceled => _canceled;
-        ///// <summary>
-        ///// Cancelのアクションに応じてフラグを更新
-        ///// </summary>
-        ///// <param name="context">コールバック</param>
-        //public void OnCanceled(InputAction.CallbackContext context)
-        //{
-        //    _canceled = context.ReadValueAsButton();
-        //}
+        /// <summary>パッド2</summary>
+        private bool _pad_2;
+        /// <summary>パッド2</summary>
+        public bool Pad_2 => _pad_2;
+        /// <summary>
+        /// パッド2のアクションに応じてフラグを更新
+        /// </summary>
+        /// <param name="context">コールバック</param>
+        public void OnPad_2(MidiChannel channel, int knob, float value)
+        {
+            if (IsMidiChannelCh1(channel))
+            {
+                switch ((MidiChannelKnob)knob)
+                {
+                    case MidiChannelKnob.A_Pad_2:
+                        _pad_2 = value == 1f;
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         /// <summary>スクラッチ</summary>
         private float _scratch;
         /// <summary>スクラッチ</summary>
@@ -90,7 +102,6 @@ namespace Main.InputSystem
         /// <param name="context">コールバック</param>
         public void OnScratch(MidiChannel channel, int knob, float value)
         {
-            Debug.Log($"channel:[{channel}]_knob:[{knob}]_value:[{value}]");
             if (IsMidiChannelCh1(channel))
             {
                 switch ((MidiChannelKnob)knob)
@@ -131,7 +142,7 @@ namespace Main.InputSystem
                 switch (channel)
                 {
                     case MidiChannel.Ch1:
-                        return false;
+                        return true;
                     default:
                         return false;
                 }
@@ -157,5 +168,6 @@ namespace Main.InputSystem
         D = 3,
         M = 26,
         A_Submit = 29,
+        A_Pad_2 = 30,
     }
 }

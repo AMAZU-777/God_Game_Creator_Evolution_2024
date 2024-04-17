@@ -53,10 +53,6 @@ namespace Main.InputSystem
         [SerializeField] private InputMidiJack inputMidiJack;
         /// <summary>MIDIJackの入力を取得</summary>
         public InputMidiJack InputMidiJack => inputMidiJack;
-        /// <summary>デバイスタイプ</summary>
-        [SerializeField] private InputSysDeviceType deviceType;
-        /// <summary>デバイスタイプ</summary>
-        public InputSysDeviceType DeviceType => deviceType;
 
         private void Reset()
         {
@@ -283,14 +279,14 @@ namespace Main.InputSystem
         MidiJack,
     }
 
-    /// <summary>
-    /// デバイスタイプ
-    /// </summary>
-    public enum InputSysDeviceType
-    {
-        /// <summary>コントローラー</summary>
-        GamePad,
-        /// <summary>TourchOSC / DDJ-200</summary>
-        MidiJack,
-    }
+    ///// <summary>
+    ///// デバイスタイプ
+    ///// </summary>
+    //public enum InputSysDeviceType
+    //{
+    //    /// <summary>コントローラー</summary>
+    //    GamePad,
+    //    /// <summary>TourchOSC / DDJ-200</summary>
+    //    MidiJack,
+    //}
 }

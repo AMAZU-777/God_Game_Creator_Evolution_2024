@@ -57,6 +57,7 @@ namespace Main.Model
                 Debug.LogError("SetInputValueInModel");
             inputSlipLoopState.beatLength = new IntReactiveProperty();
             inputSlipLoopState.crossVectorHistory = new ReactiveCollection<Vector2>();
+            inputSlipLoopState.crossVector = new Vector2ReactiveProperty();
             inputSlipLoopState.IsLooping = new BoolReactiveProperty();
             inputSlipLoopState.ActionTrigger = new BoolReactiveProperty();
             if (!_inputSystemUtility.SetInputValueInModel(inputSlipLoopState, this))

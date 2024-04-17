@@ -55,9 +55,7 @@ namespace Main.Utility
                                 case InputMode.MidiJack:
                                     float currentInputMidiJack = x.InputMidiJack.Scratch;
                                     if (IsPerformed(previousInputMidiJack.Value, currentInputMidiJack, true))
-                                    {
                                         inputValue.Value = previousInputMidiJack.Value - currentInputMidiJack;
-                                    }
                                     else
                                         inputValue.Value = autoSpinSpeed;
                                     previousInputMidiJack.Value = currentInputMidiJack; // 現在の入力を保存
@@ -754,26 +752,59 @@ namespace Main.Utility
         {
             try
             {
-                Vector2ReactiveProperty navigatedReact = new Vector2ReactiveProperty();
-                navigatedReact.ObserveEveryValueChanged(x => x.Value)
-                    .Pairwise()
-                    .Subscribe(pair =>
-                    {
-                        // ボタン入力が離された場合に入力値を更新
-                        if (0f == pair.Current.sqrMagnitude)
-                        {
-                            // 直前フレームの入力から入力角度を取得、斜めは許容しない
-                            var navigated = pair.Previous;
-                            if (Mathf.Abs(navigated.x) > Mathf.Abs(navigated.y))
-                                inputSlipLoopState.crossVectorHistory.Add(new Vector2(Mathf.Sign(navigated.x), 0));
-                            else
-                                inputSlipLoopState.crossVectorHistory.Add(new Vector2(0, Mathf.Sign(navigated.y)));
-                        }
-                    });
-                Observable.FromCoroutine<InputSystemsOwner>(observer => UpdateAsObservableOfInputSystemsOwner(observer, model))
-                    .Where(x => x != null)
-                    .Subscribe(x => navigatedReact.Value = x.InputUI.Navigated)
-                    .AddTo(model);
+                switch ((InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value)
+                {
+                    case InputMode.Gamepad:
+                        Vector2ReactiveProperty navigatedReact = new Vector2ReactiveProperty();
+                        navigatedReact.ObserveEveryValueChanged(x => x.Value)
+                            .Pairwise()
+                            .Subscribe(pair =>
+                            {
+                                // ボタン入力が離された場合に入力値を更新
+                                if (0f == pair.Current.sqrMagnitude)
+                                {
+                                    // 直前フレームの入力から入力角度を取得、斜めは許容しない
+                                    var navigated = pair.Previous;
+                                    if (Mathf.Abs(navigated.x) > Mathf.Abs(navigated.y))
+                                        inputSlipLoopState.crossVectorHistory.Add(new Vector2(Mathf.Sign(navigated.x), 0));
+                                    else
+                                        inputSlipLoopState.crossVectorHistory.Add(new Vector2(0, Mathf.Sign(navigated.y)));
+                                }
+                            });
+                        Observable.FromCoroutine<InputSystemsOwner>(observer => UpdateAsObservableOfInputSystemsOwner(observer, model))
+                            .Where(x => x != null)
+                            .Subscribe(x => navigatedReact.Value = x.InputUI.Navigated)
+                            .AddTo(model);
+
+                        break;
+                    case InputMode.MidiJack:
+                        Vector2ReactiveProperty navigatedReact_1 = new Vector2ReactiveProperty();
+                        navigatedReact_1.ObserveEveryValueChanged(x => x.Value)
+                            .Subscribe(navigated =>
+                            {
+                                if (Mathf.Abs(navigated.x) > Mathf.Abs(navigated.y))
+                                    inputSlipLoopState.crossVector.Value = new Vector2(Mathf.Sign(navigated.x), 0);
+                                else if (Mathf.Abs(navigated.x) < Mathf.Abs(navigated.y))
+                                    inputSlipLoopState.crossVector.Value = new Vector2(0, Mathf.Sign(navigated.y));
+                                else
+                                    inputSlipLoopState.crossVector.Value = navigated;
+                            });
+                        Observable.FromCoroutine<InputSystemsOwner>(observer => UpdateAsObservableOfInputSystemsOwner(observer, model))
+                            .Where(x => x != null)
+                            .Subscribe(x =>
+                            {
+                                if (x.InputMidiJack.Pad_2)
+                                    navigatedReact_1.Value = Vector2.right;
+                                else if (navigatedReact_1.Value.Equals(Vector2.right) &&
+                                    !x.InputMidiJack.Pad_2)
+                                    navigatedReact_1.Value = Vector2.zero;
+                            })
+                            .AddTo(model);
+
+                        break;
+                    default:
+                        throw new System.ArgumentOutOfRangeException($"未対応の入力モード:{(InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value}");
+                }
 
                 return true;
             }
