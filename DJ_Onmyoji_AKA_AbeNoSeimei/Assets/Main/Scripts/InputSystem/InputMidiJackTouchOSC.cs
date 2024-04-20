@@ -12,7 +12,7 @@ namespace Main.InputSystem
     /// MIDIJackの入力を取得
     /// </summary>
     /// <see href="https://github.com/keijiro/MidiJack?tab=readme-ov-file"/>
-    public class InputMidiJack : MonoBehaviour, IInputSystemsOwner
+    public class InputMidiJackTouchOSC : MonoBehaviour, IInputSystemsOwner
     {
         private void Start()
         {

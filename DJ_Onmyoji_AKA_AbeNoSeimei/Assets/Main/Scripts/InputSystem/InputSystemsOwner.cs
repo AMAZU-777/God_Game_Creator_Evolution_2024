@@ -49,17 +49,22 @@ namespace Main.InputSystem
         [SerializeField] private InputHistroy inputHistroy;
         /// <summary>入力情報の履歴</summary>
         public InputHistroy InputHistroy => inputHistroy;
-        /// <summary>MIDIJackの入力を取得</summary>
-        [SerializeField] private InputMidiJack inputMidiJack;
-        /// <summary>MIDIJackの入力を取得</summary>
-        public InputMidiJack InputMidiJack => inputMidiJack;
+        /// <summary>MIDIJack（TouchOSC）の入力を取得</summary>
+        [SerializeField] private InputMidiJackTouchOSC inputMidiJackTouchOSC;
+        /// <summary>MIDIJack（TouchOSC）の入力を取得</summary>
+        public InputMidiJackTouchOSC InputMidiJack => inputMidiJackTouchOSC;
+        /// <summary>MIDIJack（DDJ-200）の入力を取得</summary>
+        [SerializeField] private InputMidiJackDDJ200 inputMidiJackDDJ200;
+        /// <summary>MIDIJack（DDJ-200）の入力を取得</summary>
+        public InputMidiJackDDJ200 InputMidiJackDDJ200 => inputMidiJackDDJ200;
 
         private void Reset()
         {
             inputPlayer = GetComponent<InputPlayer>();
             inputUI = GetComponent<InputUI>();
             inputHistroy = GetComponent<InputHistroy>();
-            inputMidiJack = GetComponent<InputMidiJack>();
+            inputMidiJackTouchOSC = GetComponent<InputMidiJackTouchOSC>();
+            inputMidiJackDDJ200 = GetComponent<InputMidiJackDDJ200>();
         }
 
         public void OnStart()
@@ -189,7 +194,7 @@ namespace Main.InputSystem
                 _inputActions.Dispose();
                 inputPlayer.DisableAll();
                 inputUI.DisableAll();
-                inputMidiJack.DisableAll();
+                inputMidiJackTouchOSC.DisableAll();
                 _compositeDisposable.Clear();
 
                 return true;
