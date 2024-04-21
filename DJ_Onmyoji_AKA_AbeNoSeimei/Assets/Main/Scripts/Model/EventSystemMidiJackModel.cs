@@ -34,9 +34,9 @@ namespace Main.Model
             this.UpdateAsObservable()
                 .Select(_ => MainGameManager.Instance)
                 .Where(x => x != null &&
-                    x.InputSystemsOwner.CurrentInputMode.Value == (int)InputMode.MidiJack)
+                    x.InputSystemsOwner.CurrentInputMode.Value == (int)InputMode.MidiJackTourchOSC)
                 .Take(1)
-                .Select(x => x.InputSystemsOwner.InputMidiJack)
+                .Select(x => x.InputSystemsOwner.InputMidiJackTouchOSC)
                 .Subscribe(x =>
                 {
                     BoolReactiveProperty isLockScroll = new BoolReactiveProperty();

@@ -17,7 +17,7 @@ namespace Main.Test.Driver
                 .Select(_ => MainGameManager.Instance)
                 .Where(x => x != null)
                 .Take(1)
-                .Select(x => x.InputSystemsOwner.InputMidiJack)
+                .Select(x => x.InputSystemsOwner.InputMidiJackTouchOSC)
                 .Subscribe(x =>
                 {
                     this.UpdateAsObservable()

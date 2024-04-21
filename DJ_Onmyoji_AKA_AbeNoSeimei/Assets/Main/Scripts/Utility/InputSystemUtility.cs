@@ -7,6 +7,7 @@ using Main.Model;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Main.Utility
 {
@@ -52,13 +53,14 @@ namespace Main.Utility
                                     previousInput.Value = currentInput; // 現在の入力を保存
 
                                     break;
-                                case InputMode.MidiJack:
-                                    float currentInputMidiJack = x.InputMidiJack.Scratch;
-                                    if (IsPerformed(previousInputMidiJack.Value, currentInputMidiJack, true))
-                                        inputValue.Value = previousInputMidiJack.Value - currentInputMidiJack;
-                                    else
-                                        inputValue.Value = autoSpinSpeed;
-                                    previousInputMidiJack.Value = currentInputMidiJack; // 現在の入力を保存
+                                case InputMode.MidiJackTourchOSC:
+                                    if (!UpdateInputMidiJack(previousInputMidiJack, inputValue, autoSpinSpeed, x.InputMidiJackTouchOSC.Scratch))
+                                        throw new System.Exception("UpdateInputMidiJack");
+
+                                    break;
+                                case InputMode.MidiJackDDJ200:
+                                    if (!UpdateInputMidiJack(previousInputMidiJack, inputValue, autoSpinSpeed, x.InputMidiJackDDJ200.Scratch))
+                                        throw new System.Exception("UpdateInputMidiJack");
 
                                     break;
                                 default:
@@ -68,6 +70,33 @@ namespace Main.Utility
                         }
                     })
                     .AddTo(model);
+
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError(e);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// InputMidiJackの更新
+        /// </summary>
+        /// <param name="previousInputMidiJack">過去の入力（MIDIJack）</param>
+        /// <param name="inputValue">入力角度</param>
+        /// <param name="autoSpinSpeed">自動回転の速度</param>
+        /// <param name="currentInputMidiJack">スクラッチ値</param>
+        /// <returns>成功／失敗</returns>
+        private bool UpdateInputMidiJack(FloatReactiveProperty previousInputMidiJack, IReactiveProperty<float> inputValue, float autoSpinSpeed, float currentInputMidiJack)
+        {
+            try
+            {
+                if (IsPerformed(previousInputMidiJack.Value, currentInputMidiJack, true))
+                    inputValue.Value = previousInputMidiJack.Value - currentInputMidiJack;
+                else
+                    inputValue.Value = autoSpinSpeed;
+                previousInputMidiJack.Value = currentInputMidiJack; // 現在の入力を保存
 
                 return true;
             }
@@ -777,7 +806,7 @@ namespace Main.Utility
                             .AddTo(model);
 
                         break;
-                    case InputMode.MidiJack:
+                    case InputMode.MidiJackTourchOSC:
                         Vector2ReactiveProperty navigatedReact_1 = new Vector2ReactiveProperty();
                         navigatedReact_1.ObserveEveryValueChanged(x => x.Value)
                             .Subscribe(navigated =>
@@ -793,14 +822,17 @@ namespace Main.Utility
                             .Where(x => x != null)
                             .Subscribe(x =>
                             {
-                                if (x.InputMidiJack.Pad_2)
+                                if (x.InputMidiJackTouchOSC.Pad_2)
                                     navigatedReact_1.Value = Vector2.right;
                                 else if (navigatedReact_1.Value.Equals(Vector2.right) &&
-                                    !x.InputMidiJack.Pad_2)
+                                    !x.InputMidiJackTouchOSC.Pad_2)
                                     navigatedReact_1.Value = Vector2.zero;
                             })
                             .AddTo(model);
 
+                        break;
+                    case InputMode.MidiJackDDJ200:
+                        Debug.LogWarning("未実装");
                         break;
                     default:
                         throw new System.ArgumentOutOfRangeException($"未対応の入力モード:{(InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value}");

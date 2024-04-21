@@ -52,7 +52,7 @@ namespace Main.InputSystem
         /// <summary>MIDIJack（TouchOSC）の入力を取得</summary>
         [SerializeField] private InputMidiJackTouchOSC inputMidiJackTouchOSC;
         /// <summary>MIDIJack（TouchOSC）の入力を取得</summary>
-        public InputMidiJackTouchOSC InputMidiJack => inputMidiJackTouchOSC;
+        public InputMidiJackTouchOSC InputMidiJackTouchOSC => inputMidiJackTouchOSC;
         /// <summary>MIDIJack（DDJ-200）の入力を取得</summary>
         [SerializeField] private InputMidiJackDDJ200 inputMidiJackDDJ200;
         /// <summary>MIDIJack（DDJ-200）の入力を取得</summary>
@@ -119,7 +119,7 @@ namespace Main.InputSystem
             _inputActions.Enable();
 
             _compositeDisposable = new CompositeDisposable();
-            _currentInputMode = new IntReactiveProperty((int)InputMode.MidiJack);
+            _currentInputMode = new IntReactiveProperty((int)InputMode.MidiJackDDJ200);
             //// 入力モード 0:キーボード 1:コントローラー
             //this.UpdateAsObservable()
             //    .Subscribe(_ =>
@@ -280,8 +280,10 @@ namespace Main.InputSystem
         Gamepad,
         /// <summary>キーボード</summary>
         Keyboard,
-        /// <summary>TourchOSC / DDJ-200</summary>
-        MidiJack,
+        /// <summary>TourchOSC</summary>
+        MidiJackTourchOSC,
+        /// <summary>DDJ-200</summary>
+        MidiJackDDJ200,
     }
 
     ///// <summary>

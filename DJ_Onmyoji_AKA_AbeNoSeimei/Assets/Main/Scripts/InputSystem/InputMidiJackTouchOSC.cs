@@ -155,19 +155,19 @@ namespace Main.InputSystem
         }
 
         public void DisableAll() { }
-    }
 
-    /// <summary>
-    /// LayOUTがAutomat5のA～D,M
-    /// </summary>
-    public enum MidiChannelKnob
-    {
-        A = 0,
-        B = 1,
-        C = 2,
-        D = 3,
-        M = 26,
-        A_Submit = 29,
-        A_Pad_2 = 30,
+        /// <summary>
+        /// LayOUTがAutomat5のA～D,M
+        /// </summary>
+        private enum MidiChannelKnob
+        {
+            A = 0,
+            B = 1,
+            C = 2,
+            D = 3,
+            M = 26,
+            A_Submit = 29,
+            A_Pad_2 = 30,
+        }
     }
 }

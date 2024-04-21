@@ -217,7 +217,7 @@ namespace Main.Utility
                             });
 
                         break;
-                    case InputMode.MidiJack:
+                    case InputMode.MidiJackTourchOSC:
                         inputSlipLoopState.crossVector.ObserveEveryValueChanged(x => x.Value)
                             .Subscribe(x =>
                             {
@@ -241,6 +241,9 @@ namespace Main.Utility
                                 }
                             });
 
+                        break;
+                    case InputMode.MidiJackDDJ200:
+                        Debug.LogWarning("未実装");
                         break;
                     default:
                         throw new System.ArgumentOutOfRangeException($"未対応の入力モード:{(InputMode)MainGameManager.Instance.InputSystemsOwner.CurrentInputMode.Value}");

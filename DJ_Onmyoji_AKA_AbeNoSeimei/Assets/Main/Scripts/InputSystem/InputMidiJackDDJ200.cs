@@ -2,6 +2,8 @@ using Main.InputSystem;
 using MidiJack;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx.Triggers;
+using UniRx;
 using UnityEngine;
 
 public class InputMidiJackDDJ200 : MonoBehaviour
@@ -9,45 +11,53 @@ public class InputMidiJackDDJ200 : MonoBehaviour
     private void Start()
     {
         MidiMaster.knobDelegate += OnScratch;
+        FloatReactiveProperty elapsedTime = new FloatReactiveProperty();
+        this.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+                elapsedTime.Value += Time.deltaTime;
+                if (userActionTime < elapsedTime.Value)
+                {
+                    elapsedTime.Value = 0f;
+                    _scratch = 0f;
+                }
+            });
     }
 
     private void OnDestroy()
     {
         MidiMaster.knobDelegate -= OnScratch;
+        _scratch = 0f;
     }
 
-    /// <summary>ƒXƒNƒ‰ƒbƒ`</summary>
+    /// <summary>ã‚¹ã‚¯ãƒ©ãƒƒãƒ</summary>
     private float _scratch;
-    /// <summary>ƒXƒNƒ‰ƒbƒ`</summary>
+    /// <summary>ã‚¹ã‚¯ãƒ©ãƒƒãƒ</summary>
     public float Scratch => _scratch;
-    /// <summary>ƒXƒNƒ‰ƒbƒ`‚Ì’lƒŒƒxƒ‹</summary>
+    /// <summary>ã‚¹ã‚¯ãƒ©ãƒƒãƒã®å€¤ãƒ¬ãƒ™ãƒ«</summary>
     [SerializeField] private float scratchLevel = 1f;
-    /// <summary>ƒ†[ƒU‚Ì1“ü—Í‚ğs‚¤•½‹ÏŠÔi0.2`0.5•bj</summary>
+    /// <summary>ãƒ¦ãƒ¼ã‚¶ã®1å…¥åŠ›ã‚’è¡Œã†å¹³å‡æ™‚é–“ï¼ˆ0.2ï½0.5ç§’ï¼‰</summary>
     [SerializeField] private float userActionTime = .2f;
 
     /// <summary>
-    /// Scratch‚ÌƒAƒNƒVƒ‡ƒ“‚É‰‚¶‚Äƒtƒ‰ƒO‚ğXV
+    /// Scratchã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¿œã˜ã¦ãƒ•ãƒ©ã‚°ã‚’æ›´æ–°
     /// </summary>
-    /// <param name="context">ƒR[ƒ‹ƒoƒbƒN</param>
+    /// <param name="context">ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯</param>
     public void OnScratch(MidiChannel channel, int knob, float value)
     {
         Debug.Log($"channel:[{channel}]_knob:[{knob}]_value:[{value}]");
-        if (IsMidiChannelCh1(channel))
+        if (IsMidiChannelCh1OrCh2(channel))
         {
             switch ((MidiChannelKnob)knob)
             {
-                case MidiChannelKnob.M:
-                    // value‚ª0i”½Œv‰ñ‚èj‚©1iŒv‰ñ‚èj‚Ìê‡A‚»‚ê‚É‰‚¶‚Ä_scratch‚ğXV
-                    if (value == 0)
-                    {
-                        // ”½Œv‰ñ‚è‚Ìê‡A_scratch‚ğŒ¸­‚³‚¹‚é
-                        _scratch += scratchLevel; // ‚±‚Ì’l‚Í’²®‚ª•K—v‚©‚à‚µ‚ê‚Ü‚¹‚ñ
-                    }
-                    else if (value == 1)
-                    {
-                        // Œv‰ñ‚è‚Ìê‡A_scratch‚ğ‘‰Á‚³‚¹‚é
-                        _scratch -= scratchLevel; // ‚±‚Ì’l‚Í’²®‚ª•K—v‚©‚à‚µ‚ê‚Ü‚¹‚ñ
-                    }
+                case MidiChannelKnob.D1_T:
+                    if (!UpdateScratch(value))
+                        Debug.LogError("UpdateScratch");
+
+                    break;
+                case MidiChannelKnob.D1_S:
+                    if (!UpdateScratch(value))
+                        Debug.LogError("UpdateScratch");
 
                     break;
                 default:
@@ -61,17 +71,49 @@ public class InputMidiJackDDJ200 : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ`ƒƒƒ“ƒlƒ‹1‚ğg—p‚µ‚Ä‚¢‚é‚©
+    /// ã‚¹ã‚¯ãƒ©ãƒƒãƒã®å€¤ã‚’æ›´æ–°
     /// </summary>
-    /// <param name="channel">MIDIƒ`ƒƒƒ“ƒlƒ‹</param>
-    /// <returns>g—p^–¢g—p</returns>
-    private bool IsMidiChannelCh1(MidiChannel channel)
+    /// <param name="value">å€¤</param>
+    /// <returns>æˆåŠŸï¼å¤±æ•—</returns>
+    private bool UpdateScratch(float value)
+    {
+        try
+        {
+            // valueãŒ0ï¼ˆåæ™‚è¨ˆå›ã‚Šï¼‰ã‹1ï¼ˆæ™‚è¨ˆå›ã‚Šï¼‰ã®å ´åˆã€ãã‚Œã«å¿œã˜ã¦_scratchã‚’æ›´æ–°
+            if (value == .496063f)
+            {
+                // åæ™‚è¨ˆå›ã‚Šã®å ´åˆã€_scratchã‚’æ¸›å°‘ã•ã›ã‚‹
+                _scratch += scratchLevel; // ã“ã®å€¤ã¯èª¿æ•´ãŒå¿…è¦ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“
+            }
+            else if (value == .511811f)
+            {
+                // æ™‚è¨ˆå›ã‚Šã®å ´åˆã€_scratchã‚’å¢—åŠ ã•ã›ã‚‹
+                _scratch -= scratchLevel; // ã“ã®å€¤ã¯èª¿æ•´ãŒå¿…è¦ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“
+            }
+
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// ãƒãƒ£ãƒ³ãƒãƒ«1ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‹
+    /// </summary>
+    /// <param name="channel">MIDIãƒãƒ£ãƒ³ãƒãƒ«</param>
+    /// <returns>ä½¿ç”¨ï¼æœªä½¿ç”¨</returns>
+    private bool IsMidiChannelCh1OrCh2(MidiChannel channel)
     {
         try
         {
             switch (channel)
             {
                 case MidiChannel.Ch1:
+                    return true;
+                case MidiChannel.Ch2:
                     return true;
                 default:
                     return false;
@@ -82,5 +124,22 @@ public class InputMidiJackDDJ200 : MonoBehaviour
             Debug.LogError(e);
             throw e;
         }
+    }
+
+    /// <summary>
+    /// LayOUTãŒAutomat5ã®Aï½D,M
+    /// </summary>
+    private enum MidiChannelKnob
+    {
+        D1_T = 34,
+        D1_S = 33,
+        M1
+        //A = 0,
+        //B = 1,
+        //C = 2,
+        //D = 3,
+        //M = 26,
+        //A_Submit = 29,
+        //A_Pad_2 = 30,
     }
 }
